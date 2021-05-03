@@ -2,7 +2,7 @@
 // Created by galam on 30/04/2021.
 //
 #include <stdlib.h>
-#include "kmeans.h"
+//#include "kmeans.h"
 
 typedef enum HasChangedEnum {
     TRUE = 1,
