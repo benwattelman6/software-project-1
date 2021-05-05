@@ -4,22 +4,26 @@ POINTS_SEPARATOR = '\n'
 COORDINATES_SEPARATOR = ','
 
 
+def get_arguments():
+    print(sys.argv)
+    k = int(sys.argv[1])
+    max_iter = int(sys.argv[2]) if len(sys.argv) > 2 else 200
+    points = []
+    try:
+        while True:
+            row = input()
+            points.append([float(n) for n in row.split(COORDINATES_SEPARATOR)])
+    except EOFError:
+        pass
+    return k, points, max_iter
+
+
 def get_distance(p1, p2):
     assert len(p1) == len(p2)
     distance = 0
     for i in range(len(p1)):
         distance += (p1[i] - p2[i]) ** 2
     return distance
-
-
-def get_points(filename):
-    points = []
-    with open(filename, 'r') as f:
-        data = f.read()
-    for point in data.split(POINTS_SEPARATOR):
-        if len(point) != 0:
-            points.append([float(n) for n in point.split(COORDINATES_SEPARATOR)])
-    return points
 
 
 def split_points_to_clusters(centroids, points):
@@ -54,11 +58,7 @@ def calculate_new_centroids(centroids):
 
 
 def main():
-    assert len(sys.argv) in [3, 4]
-    k = int(sys.argv[1])
-    filename = sys.argv[2]
-    max_iter = int(sys.argv[3]) if len(sys.argv) > 3 else 200  # the default max_iter
-    points = get_points(filename)
+    k, points, max_iter = get_arguments()
     centroids = []
     for i in range(k):  # initiate the centroids to be the first k points
         centroids.append({"point": points[i]})
@@ -67,7 +67,8 @@ def main():
         if not calculate_new_centroids(centroids):  # there is no change in the centroids
             max_iter = 0  # breaks the loop
         max_iter -= 1
-    output = POINTS_SEPARATOR.join([COORDINATES_SEPARATOR.join([str(round(i, 4)) for i in c["point"]]) for c in centroids])
+    output = POINTS_SEPARATOR.join(
+        [COORDINATES_SEPARATOR.join(["{:.4f}".format(round(i, 4)) for i in c["point"]]) for c in centroids])
     print(output)
     return output
 
