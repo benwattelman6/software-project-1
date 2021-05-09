@@ -5,7 +5,6 @@ COORDINATES_SEPARATOR = ','
 
 
 def get_arguments():
-    print(sys.argv)
     k = int(sys.argv[1])
     max_iter = int(sys.argv[2]) if len(sys.argv) > 2 else 200
     points = []
